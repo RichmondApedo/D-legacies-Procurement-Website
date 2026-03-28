@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,7 +24,7 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 45 75% 50%;
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 
   .dark {
@@ -54,7 +55,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased selection:bg-secondary/30;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight text-primary;
@@ -63,14 +64,18 @@
 
 @layer components {
   .premium-shadow {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.08);
   }
   
-  .glass-effect {
-    @apply bg-white/80 backdrop-blur-md border border-white/20;
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl;
   }
 
-  .btn-premium {
-    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg;
+  .btn-gold {
+    @apply bg-secondary text-primary font-bold hover:bg-secondary/90 transition-all active:scale-95 shadow-lg shadow-secondary/20 rounded-xl;
+  }
+
+  .section-padding {
+    @apply py-24 md:py-32;
   }
 }

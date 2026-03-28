@@ -2,27 +2,33 @@
   "placeholderImages": [
     {
       "id": "hero-consulting",
-      "description": "Professional procurement consulting session in a modern office",
-      "imageUrl": "https://picsum.photos/seed/dlegacies1/1200/800",
-      "imageHint": "business consulting"
+      "description": "Executive procurement consulting session in a high-end Accra office",
+      "imageUrl": "https://picsum.photos/seed/dlegacies_hero/1920/1080",
+      "imageHint": "business office"
     },
     {
       "id": "sourcing-logistics",
-      "description": "Global sourcing and logistics network map",
-      "imageUrl": "https://picsum.photos/seed/dlegacies2/800/600",
+      "description": "Sophisticated global supply chain and logistics visualization",
+      "imageUrl": "https://picsum.photos/seed/dlegacies_logistics/800/600",
       "imageHint": "global logistics"
     },
     {
-      "id": "office-accra",
-      "description": "Corporate office building in Accra Ghana",
-      "imageUrl": "https://picsum.photos/seed/dlegacies3/800/600",
-      "imageHint": "accra office"
+      "id": "warehouse-premium",
+      "description": "Highly organized modern industrial warehouse and distribution center",
+      "imageUrl": "https://picsum.photos/seed/dlegacies_warehouse/800/600",
+      "imageHint": "modern warehouse"
     },
     {
-      "id": "procurement-process",
-      "description": "Hands shaking over a procurement contract",
-      "imageUrl": "https://picsum.photos/seed/dlegacies4/800/600",
-      "imageHint": "business agreement"
+      "id": "consulting-team",
+      "description": "D'LEGACIES expert procurement consulting team in discussion",
+      "imageUrl": "https://picsum.photos/seed/dlegacies_team/800/800",
+      "imageHint": "business meeting"
+    },
+    {
+      "id": "accra-office",
+      "description": "Premium commercial building in the heart of Accra's business district",
+      "imageUrl": "https://picsum.photos/seed/dlegacies_accra/800/600",
+      "imageHint": "accra city"
     }
   ]
 }
