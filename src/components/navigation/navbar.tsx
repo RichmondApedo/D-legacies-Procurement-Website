@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
+  { name: "Our Story", href: "/about" },
   { name: "Services", href: "/services" },
   { name: "Contact", href: "/contact" },
 ];
@@ -21,7 +21,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 40);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -29,18 +29,26 @@ export function Navbar() {
 
   return (
     <header className={cn(
-      "sticky top-0 z-50 w-full transition-all duration-300",
-      scrolled ? "bg-white/95 backdrop-blur shadow-md py-2" : "bg-white py-4"
+      "fixed top-0 z-50 w-full transition-all duration-500 ease-in-out",
+      scrolled 
+        ? "bg-white/80 backdrop-blur-xl border-b border-primary/5 py-3" 
+        : "bg-transparent py-6"
     )}>
       <div className="container-custom">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex items-center group">
               <div className="flex flex-col">
-                <span className="text-2xl font-bold tracking-tighter text-primary leading-none">
+                <span className={cn(
+                  "text-3xl font-bold tracking-tighter leading-none transition-colors duration-500",
+                  scrolled || pathname !== "/" ? "text-primary" : "text-white"
+                )}>
                   D&apos;LEGACIES
                 </span>
-                <span className="text-[10px] font-bold tracking-[0.4em] text-secondary uppercase leading-none mt-1 transition-all group-hover:tracking-[0.5em]">
+                <span className={cn(
+                  "text-[11px] font-bold tracking-[0.5em] uppercase leading-none mt-1 transition-all group-hover:tracking-[0.6em]",
+                  scrolled || pathname !== "/" ? "text-secondary" : "text-secondary/80"
+                )}>
                   E-PROCUREMENT
                 </span>
               </div>
@@ -48,23 +56,31 @@ export function Navbar() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-10">
+          <nav className="hidden md:flex items-center space-x-12">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-bold uppercase tracking-widest transition-all hover:text-primary relative py-1",
+                  "text-xs font-bold uppercase tracking-[0.2em] transition-all hover:text-secondary relative py-1",
                   pathname === link.href 
-                    ? "text-primary after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-secondary" 
-                    : "text-muted-foreground/80"
+                    ? scrolled || pathname !== "/" ? "text-primary" : "text-white"
+                    : scrolled || pathname !== "/" ? "text-muted-foreground/70" : "text-white/60"
                 )}
               >
                 {link.name}
+                {pathname === link.href && (
+                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-secondary animate-in fade-in zoom-in duration-500"></span>
+                )}
               </Link>
             ))}
-            <Button asChild variant="default" className="bg-primary hover:bg-primary/90 text-white font-bold px-8 rounded-full shadow-premium transition-transform hover:scale-105">
-              <Link href="/request" className="flex items-center">
+            <Button asChild variant="default" className={cn(
+              "font-bold px-10 rounded-full shadow-lg transition-all hover:scale-105",
+              scrolled || pathname !== "/" 
+                ? "bg-primary hover:bg-primary/90 text-white" 
+                : "bg-white text-primary hover:bg-white/90"
+            )}>
+              <Link href="/request" className="flex items-center uppercase tracking-widest text-[10px]">
                 Get Quote <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -74,9 +90,12 @@ export function Navbar() {
           <div className="flex md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-xl text-primary hover:bg-muted focus:outline-none transition-colors"
+              className={cn(
+                "p-2 rounded-2xl transition-colors",
+                scrolled || pathname !== "/" ? "text-primary hover:bg-primary/5" : "text-white hover:bg-white/10"
+              )}
             >
-              {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+              {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
             </button>
           </div>
         </div>
@@ -84,24 +103,30 @@ export function Navbar() {
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden bg-white border-b absolute top-full left-0 w-full animate-in slide-in-from-top duration-300 shadow-xl">
-          <div className="px-4 pt-4 pb-10 space-y-2">
+        <div className="md:hidden bg-white fixed inset-0 z-[100] animate-in slide-in-from-right duration-500">
+          <div className="flex flex-col h-full p-8 pt-24 space-y-8">
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="absolute top-8 right-8 p-2 text-primary"
+            >
+              <X className="h-10 w-10" />
+            </button>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className={cn(
-                  "block px-4 py-4 rounded-xl text-lg font-bold tracking-tight",
-                  pathname === link.href ? "bg-primary/5 text-primary" : "text-muted-foreground hover:bg-muted/50"
+                  "text-5xl font-bold tracking-tight py-2 transition-colors",
+                  pathname === link.href ? "text-secondary" : "text-primary hover:text-secondary"
                 )}
               >
                 {link.name}
               </Link>
             ))}
-            <div className="pt-6 px-4">
-              <Button asChild className="w-full bg-primary h-14 rounded-xl font-bold text-lg">
-                <Link href="/request" onClick={() => setIsOpen(false)}>Start Sourcing Request</Link>
+            <div className="pt-12">
+              <Button asChild className="w-full bg-primary h-20 rounded-3xl font-bold text-2xl shadow-2xl">
+                <Link href="/request" onClick={() => setIsOpen(false)}>Initiate Request</Link>
               </Button>
             </div>
           </div>

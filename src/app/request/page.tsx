@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -8,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ShoppingCart, Send, FileText, DollarSign, Calendar, Building2, User } from "lucide-react";
+import { ShoppingCart, Send, FileText, DollarSign, Calendar, Building2, User, Globe } from "lucide-react";
 
 export default function RequestServicePage() {
   const { toast } = useToast();
@@ -22,8 +21,8 @@ export default function RequestServicePage() {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     toast({
-      title: "Request Submitted Successfully",
-      description: "Our procurement team will review your request and contact you within 24 hours.",
+      title: "Request Transmitted",
+      description: "Our procurement board has been notified. You will receive a response within 24 standard business hours.",
     });
     
     setIsSubmitting(false);
@@ -31,104 +30,143 @@ export default function RequestServicePage() {
   };
 
   return (
-    <div className="py-16 bg-background min-h-screen">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-primary mb-4">Request Procurement Service</h1>
-          <p className="text-muted-foreground text-lg">
-            Provide the details below and our sourcing experts will find the best solutions for your business.
+    <div className="pt-32 pb-24 bg-background min-h-screen">
+      <div className="container mx-auto px-6 max-w-5xl">
+        <div className="text-center mb-16 space-y-6">
+          <div className="inline-flex items-center text-secondary text-xs font-bold uppercase tracking-[0.4em] bg-secondary/5 px-6 py-2 rounded-full">
+            Institutional Sourcing
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold text-primary tracking-tight">Initiate <span className="italic font-serif text-secondary">Sourcing</span></h1>
+          <p className="text-muted-foreground text-xl max-w-2xl mx-auto font-light leading-relaxed">
+            Specify your procurement requirements. Our global network will be activated immediately to locate the highest value solutions.
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <Card className="shadow-2xl border-t-8 border-secondary overflow-hidden">
-            <CardHeader className="bg-white pb-8">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-primary/10 rounded-xl">
-                  <ShoppingCart className="h-8 w-8 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-2xl font-bold text-primary">Procurement Details</CardTitle>
-                  <CardDescription>All fields marked with * are required</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-
-            <CardContent className="space-y-8 px-6 pb-8">
-              {/* Business Info Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="businessName" className="flex items-center"><Building2 className="h-4 w-4 mr-2" /> Business Name *</Label>
-                  <Input id="businessName" placeholder="D'LEGACIES E-PROCUREMENT" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="contactName" className="flex items-center"><User className="h-4 w-4 mr-2" /> Contact Person *</Label>
-                  <Input id="contactName" placeholder="Full Name" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="flex items-center">Email Address *</Label>
-                  <Input id="email" type="email" placeholder="email@example.com" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="flex items-center">Phone Number *</Label>
-                  <Input id="phone" placeholder="e.g. 0557759388" required />
-                </div>
-              </div>
-
-              <hr />
-
-              {/* Requirement Section */}
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="goodsNeeded" className="flex items-center"><ShoppingCart className="h-4 w-4 mr-2" /> Goods/Services Needed *</Label>
-                  <Input id="goodsNeeded" placeholder="e.g. 50 units of Dell XPS Laptops" required />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description" className="flex items-center"><FileText className="h-4 w-4 mr-2" /> Detailed Specifications *</Label>
-                  <Textarea 
-                    id="description" 
-                    placeholder="Provide as much detail as possible (models, sizes, quantities, quality standards...)" 
-                    className="min-h-[150px]"
-                    required 
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="budget" className="flex items-center"><DollarSign className="h-4 w-4 mr-2" /> Estimated Budget (GHS) *</Label>
-                    <Input id="budget" type="number" placeholder="e.g. 50000" required />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2">
+              <Card className="shadow-premium border-none rounded-[2.5rem] overflow-hidden">
+                <CardHeader className="bg-white p-10 border-b">
+                  <div className="flex items-center space-x-6">
+                    <div className="p-4 bg-primary/5 rounded-[1.25rem]">
+                      <ShoppingCart className="h-8 w-8 text-primary" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-2xl font-bold text-primary">Requirement Profile</CardTitle>
+                      <CardDescription className="text-base">Detailed specifications for accuracy in sourcing.</CardDescription>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="timeline" className="flex items-center"><Calendar className="h-4 w-4 mr-2" /> Desired Timeline *</Label>
-                    <Input id="timeline" placeholder="e.g. Within 2 weeks" required />
-                  </div>
-                </div>
+                </CardHeader>
 
-                <div className="space-y-2">
-                  <Label htmlFor="file">Attachments (Specifications/Images)</Label>
-                  <div className="border-2 border-dashed border-muted p-8 rounded-xl text-center bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer">
-                    <input type="file" id="file" className="hidden" />
-                    <FileText className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Click to upload or drag and drop your files</p>
+                <CardContent className="space-y-12 p-10">
+                  {/* Business Info Section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <Label htmlFor="businessName" className="text-xs font-bold uppercase tracking-widest text-primary/60">Business Entity *</Label>
+                      <Input id="businessName" placeholder="Legal Organization Name" className="h-14 bg-muted/30 border-none rounded-2xl focus:ring-secondary" required />
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="contactName" className="text-xs font-bold uppercase tracking-widest text-primary/60">Authorized Representative *</Label>
+                      <Input id="contactName" placeholder="Full Professional Name" className="h-14 bg-muted/30 border-none rounded-2xl focus:ring-secondary" required />
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="email" className="text-xs font-bold uppercase tracking-widest text-primary/60">Professional Email *</Label>
+                      <Input id="email" type="email" placeholder="email@organization.com" className="h-14 bg-muted/30 border-none rounded-2xl focus:ring-secondary" required />
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="phone" className="text-xs font-bold uppercase tracking-widest text-primary/60">Contact Terminal *</Label>
+                      <Input id="phone" placeholder="+233..." className="h-14 bg-muted/30 border-none rounded-2xl focus:ring-secondary" required />
+                    </div>
                   </div>
-                </div>
-              </div>
-            </CardContent>
 
-            <CardFooter className="bg-muted/30 p-8 flex flex-col items-center">
-              <Button type="submit" disabled={isSubmitting} size="lg" className="w-full md:w-auto px-12 bg-primary hover:bg-primary/90 text-lg shadow-lg">
-                {isSubmitting ? (
-                  "Processing..."
-                ) : (
-                  <>Submit Request <Send className="ml-2 h-5 w-5" /></>
-                )}
-              </Button>
-              <p className="text-xs text-muted-foreground mt-4 text-center">
-                By submitting, you agree to our terms of service regarding procurement consultancy.
-              </p>
-            </CardFooter>
-          </Card>
+                  <div className="h-px bg-muted"></div>
+
+                  {/* Requirement Section */}
+                  <div className="space-y-10">
+                    <div className="space-y-3">
+                      <Label htmlFor="goodsNeeded" className="text-xs font-bold uppercase tracking-widest text-primary/60">Subject of Procurement *</Label>
+                      <Input id="goodsNeeded" placeholder="e.g. Industrial Grade Hardware" className="h-14 bg-muted/30 border-none rounded-2xl focus:ring-secondary" required />
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label htmlFor="description" className="text-xs font-bold uppercase tracking-widest text-primary/60">Detailed Technical Specifications *</Label>
+                      <Textarea 
+                        id="description" 
+                        placeholder="Define models, quantities, and quality standard requirements..." 
+                        className="min-h-[200px] bg-muted/30 border-none rounded-[1.5rem] focus:ring-secondary p-6"
+                        required 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <Label htmlFor="budget" className="text-xs font-bold uppercase tracking-widest text-primary/60">Allocated Budget (GHS) *</Label>
+                        <div className="relative">
+                           <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                           <Input id="budget" type="number" placeholder="0.00" className="h-14 pl-12 bg-muted/30 border-none rounded-2xl focus:ring-secondary" required />
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <Label htmlFor="timeline" className="text-xs font-bold uppercase tracking-widest text-primary/60">Operational Deadline *</Label>
+                        <div className="relative">
+                           <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                           <Input id="timeline" placeholder="Expected Delivery Date" className="h-14 pl-12 bg-muted/30 border-none rounded-2xl focus:ring-secondary" required />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+
+                <CardFooter className="bg-primary/5 p-10 flex flex-col items-center">
+                  <Button type="submit" disabled={isSubmitting} size="lg" className="h-16 w-full md:w-auto px-16 bg-primary hover:bg-primary/90 text-lg shadow-xl rounded-full">
+                    {isSubmitting ? (
+                      "Transmitting Data..."
+                    ) : (
+                      <>Submit Protocol <Send className="ml-3 h-5 w-5" /></>
+                    )}
+                  </Button>
+                  <p className="text-xs text-muted-foreground mt-6 text-center max-w-sm">
+                    All transmissions are secure. By submitting, you authorize D'LEGACIES to initiate preliminary market assessments.
+                  </p>
+                </CardFooter>
+              </Card>
+            </div>
+
+            <div className="space-y-8">
+              <Card className="bg-primary text-white border-none rounded-[2rem] p-8 shadow-xl">
+                 <div className="space-y-6">
+                   <div className="p-3 bg-white/10 rounded-2xl w-fit"><Globe className="h-8 w-8 text-secondary" /></div>
+                   <h4 className="text-2xl font-bold">Global Network</h4>
+                   <p className="text-white/70 text-base leading-relaxed">
+                     Your request will be broadcast across our Tier-1 supply chains in Asia, Europe, and the Americas for competitive bidding.
+                   </p>
+                   <ul className="space-y-4">
+                     {[
+                       "Verified Supplier Network",
+                       "Direct Logistics Pipelines",
+                       "Customs Compliance Hub",
+                       "Quality Assurance Audits"
+                     ].map((item, i) => (
+                       <li key={i} className="flex items-center space-x-3 text-sm font-medium">
+                         <div className="h-1.5 w-1.5 rounded-full bg-secondary"></div>
+                         <span>{item}</span>
+                       </li>
+                     ))}
+                   </ul>
+                 </div>
+              </Card>
+
+              <Card className="bg-secondary p-8 border-none rounded-[2rem] shadow-xl text-primary">
+                 <h4 className="text-xl font-bold mb-4">Urgent Consultation?</h4>
+                 <p className="text-sm font-medium mb-6 opacity-80 leading-relaxed">
+                   If your procurement is mission-critical, contact our priority desk directly.
+                 </p>
+                 <Button variant="outline" className="w-full border-primary/20 bg-white/10 font-bold hover:bg-white/20">
+                   055 775 9388
+                 </Button>
+              </Card>
+            </div>
+          </div>
         </form>
       </div>
     </div>
