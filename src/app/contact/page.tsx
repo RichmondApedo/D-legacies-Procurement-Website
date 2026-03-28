@@ -1,9 +1,9 @@
-
 "use client";
 
 import { useState } from "react";
 import { useFirestore } from "@/firebase";
 import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { processSubmissionNotification } from "@/app/actions/submissions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,13 +34,20 @@ export default function ContactPage() {
 
     try {
       const colRef = collection(db, "contactMessages");
-      // Use the non-blocking pattern for immediate UI response
+      
+      // 1. Save to Firestore
       addDocumentNonBlocking(colRef, data);
+      
+      // 2. Route Email Notification
+      const notificationResult = await processSubmissionNotification('contact_message', data);
       
       toast({
         title: "Message Transmitted",
-        description: "Your inquiry has been logged. Our team will contact you shortly.",
+        description: notificationResult.success 
+          ? "Logged and routed to dlegacies75@yahoo.com."
+          : "Logged in system. Executive notification pending.",
       });
+      
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       toast({
@@ -55,12 +62,11 @@ export default function ContactPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Header */}
       <section className="bg-primary py-32">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter">Get in Touch</h1>
           <p className="text-white/60 text-xl max-w-2xl mx-auto font-medium">
-            Have questions about our procurement services? We're here to help. Reach out through any of the channels below.
+            Inquiries are routed directly to <span className="text-secondary">dlegacies75@yahoo.com</span> for rapid response.
           </p>
         </div>
       </section>
@@ -69,15 +75,13 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             
-            {/* Contact Info */}
             <div className="space-y-10">
               <h2 className="text-3xl font-black text-primary tracking-tight">Corporate Contact</h2>
               <div className="space-y-8">
                 {[
                   { icon: <Phone className="text-secondary" />, label: "Direct Line", value: "0557759388", link: "tel:233557759388" },
-                  { icon: <Mail className="text-secondary" />, label: "Official Email", value: "dlegacies75@yahoo.com", link: "mailto:dlegacies75@yahoo.com" },
+                  { icon: <Mail className="text-secondary" />, label: "Executive Email", value: "dlegacies75@yahoo.com", link: "mailto:dlegacies75@yahoo.com" },
                   { icon: <MapPin className="text-secondary" />, label: "Headquarters", value: "Accra, Ghana", link: "#" },
-                  { icon: <Clock className="text-secondary" />, label: "Operational Hours", value: "Mon - Fri, 8AM - 5PM", link: "#" }
                 ].map((item, i) => (
                   <div key={i} className="flex items-start space-x-5">
                     <div className="p-4 bg-white rounded-2xl shadow-xl border border-muted">
@@ -106,7 +110,6 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Contact Form */}
             <div className="lg:col-span-2">
               <Card className="shadow-[0_40px_80px_-15px_rgba(0,0,0,0.1)] border-none rounded-[3rem] overflow-hidden">
                 <div className="h-3 bg-secondary w-full"></div>
@@ -131,7 +134,7 @@ export default function ContactPage() {
                       <Textarea 
                         name="message"
                         id="message" 
-                        placeholder="Please describe your requirements or questions..." 
+                        placeholder="Please describe your requirements..." 
                         className="min-h-[180px] bg-muted/30 border-none rounded-2xl focus:bg-white transition-all text-lg"
                         required 
                       />
@@ -140,7 +143,7 @@ export default function ContactPage() {
                       {isSubmitting ? (
                         <Loader2 className="animate-spin h-6 w-6" />
                       ) : (
-                        <><Send className="mr-3 h-6 w-6" /> Transmit Message</>
+                        <><Send className="mr-3 h-6 w-6" /> Transmit to Executive Team</>
                       )}
                     </Button>
                   </form>
@@ -148,17 +151,6 @@ export default function ContactPage() {
               </Card>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section className="h-[500px] bg-muted relative overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center">
-           <div className="text-center space-y-4">
-             <Globe className="h-20 w-20 text-primary opacity-10 mx-auto" />
-             <h3 className="text-2xl font-black text-primary tracking-tighter opacity-20">Accra Head Office</h3>
-             <p className="text-muted-foreground font-bold tracking-widest text-xs opacity-20 uppercase">Ghana Business Hub Integrated</p>
-           </div>
         </div>
       </section>
     </div>
