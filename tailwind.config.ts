@@ -10,8 +10,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
+        body: ['PT Sans', 'sans-serif'],
+        headline: ['PT Sans', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
@@ -93,6 +93,10 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      boxShadow: {
+        'premium': '0 20px 40px -15px rgba(20, 102, 204, 0.1)',
+        'premium-hover': '0 30px 60px -12px rgba(20, 102, 204, 0.15)',
+      }
     },
   },
   plugins: [require('tailwindcss-animate')],
