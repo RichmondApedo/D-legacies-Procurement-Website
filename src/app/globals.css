@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%; /* Very light grey/blue */
-    --foreground: 210 40% 12%; /* Deep charcoal blue */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 210 40% 12%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 40% 12%;
-    --primary: 215 80% 35%; /* Professional Royal Blue */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 45 85% 50%; /* Rich Gold Accent */
-    --secondary-foreground: 210 40% 12%;
-    --muted: 210 20% 94%;
-    --muted-foreground: 210 15% 45%;
-    --accent: 45 85% 50%;
-    --accent-foreground: 210 40% 12%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 210 20% 90%;
-    --input: 210 20% 90%;
-    --ring: 215 80% 35%;
-    --radius: 1.25rem;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
   }
 }
 
@@ -32,18 +32,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body antialiased selection:bg-secondary/30;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-headline tracking-tight;
-  }
-}
-
-@layer components {
-  .section-padding {
-    @apply py-24 md:py-32;
-  }
-  .container-custom {
-    @apply container mx-auto px-6 lg:px-12 max-w-7xl;
+    @apply bg-background text-foreground antialiased;
   }
 }
