@@ -1,0 +1,144 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * D'LEGACIES E-PROCUREMENT CONSULT - FIRESTORE SECURITY RULES
+     * 
+     * Core Philosophy:
+     * This ruleset implements a robust Administrative Access Control model (DBAC). 
+     * Public users (including unauthenticated visitors) are granted permission to view 
+     * general business information, available services, and website content. They are 
+     * also permitted to submit procurement requests and contact messages. 
+     * 
+     * All management, modification, and internal data viewing (listing leads/requests) 
+     * is strictly restricted to users whose Firebase Authentication UID exists within 
+     * the '/roles_admin' collection.
+     * 
+     * Data Structure:
+     * - /procurementRequests/{id}: Publicly creatable leads, admin-only read/write.
+     * - /contactMessages/{id}: Publicly creatable messages, admin-only read/write.
+     * - /services/{id}: Publicly readable CMS for services, admin-only write.
+     * - /businessInfo/main: Publicly readable singleton for company contact info, admin-only update.
+     * - /websiteContent/{id}: Publicly readable CMS for page sections, admin-only write.
+     * - /roles_admin/{uid}: The source of truth for administrative privileges.
+     * 
+     * Key Security Decisions:
+     * - Authorization Independence: Admin status is verified by the presence of a 
+     *   document in the 'roles_admin' collection matching the user's UID.
+     * - Public Lead Generation: To maximize business conversion, the 'create' permission 
+     *   for requests and messages is open to the public, while 'list' and 'get' 
+     *   are locked to admins.
+     * - Relational Integrity: On document creation, the rules enforce that the document's 
+     *   internal 'id' field matches the path parameter to ensure consistent data lookup.
+     */
+
+    // --- GLOBAL HELPER FUNCTIONS ---
+
+    /**
+     * @description Checks if the user is authenticated with Firebase Auth.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the authenticated user has an entry in the roles_admin collection.
+     * This is the primary gatekeeper for all administrative functions.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * @description Verifies a document exists and the user is an administrator.
+     * Used for destructive operations (update/delete).
+     */
+    function isExistingAdmin() {
+      return isAdmin() && resource != null;
+    }
+
+    // --- COLLECTION RULES ---
+
+    /**
+     * @description Rules for procurement service requests submitted by potential clients.
+     * @path /procurementRequests/{requestId}
+     * @allow (create) Public lead submission with matching ID.
+     * @allow (list/get) Admins viewing submitted requests.
+     * @deny Any read access to non-admin users.
+     * @principle Public lead generation with locked-down administrative management.
+     */
+    match /procurementRequests/{requestId} {
+      allow get, list: if isAdmin();
+      allow create: if request.resource.data.id == requestId;
+      allow update, delete: if isExistingAdmin();
+    }
+
+    /**
+     * @description Rules for general contact messages submitted through the website.
+     * @path /contactMessages/{messageId}
+     * @allow (create) Public message submission.
+     * @allow (update) Admins marking messages as read.
+     * @deny Listing or reading messages by unauthorized users.
+     * @principle Segregation of user-submitted data from public viewing.
+     */
+    match /contactMessages/{messageId} {
+      allow get, list: if isAdmin();
+      allow create: if request.resource.data.id == messageId;
+      allow update, delete: if isExistingAdmin();
+    }
+
+    /**
+     * @description Rules for procurement and sourcing services offered by the business.
+     * @path /services/{serviceId}
+     * @allow (get, list) All users to see what services are offered.
+     * @allow (create, update, delete) Admins managing the service catalog.
+     * @principle Public read-only access for marketing content.
+     */
+    match /services/{serviceId} {
+      allow get, list: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isExistingAdmin();
+    }
+
+    /**
+     * @description Rules for the singleton document storing core business contact info.
+     * @path /businessInfo/main
+     * @allow (get) All users to view contact details (phone, email, location).
+     * @allow (update) Admins to update company information.
+     * @deny Deletion or creation of new info documents (singleton pattern).
+     * @principle Singleton pattern for global business configuration.
+     */
+    match /businessInfo/{document} {
+      allow get, list: if true;
+      allow create: if false; // Singleton should be created manually or via seed script
+      allow update: if isExistingAdmin() && document == "main";
+      allow delete: if false;
+    }
+
+    /**
+     * @description Rules for editable website content sections (hero text, mission, etc).
+     * @path /websiteContent/{sectionId}
+     * @allow (get, list) All users to view the website content.
+     * @allow (create, update, delete) Admins managing page content via the dashboard.
+     * @principle CMS functionality restricted to authenticated administrators.
+     */
+    match /websiteContent/{sectionId} {
+      allow get, list: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isExistingAdmin();
+    }
+
+    /**
+     * @description Rules for managing administrative privileges.
+     * @path /roles_admin/{adminId}
+     * @allow (all) Existing admins to manage the admin list.
+     * @deny Self-creation by non-admins.
+     * @principle Database Access Control (DBAC) maintained by authorized personnel.
+     */
+    match /roles_admin/{adminId} {
+      allow get, list: if isAdmin();
+      allow create, update, delete: if isExistingAdmin();
+    }
+  }
+}

@@ -1,0 +1,369 @@
+{
+  "entities": {
+    "ProcurementRequest": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ProcurementRequest",
+      "type": "object",
+      "description": "Represents a request submitted by a business for procurement and sourcing services.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ProcurementRequest entity."
+        },
+        "businessName": {
+          "type": "string",
+          "description": "The name of the business submitting the request."
+        },
+        "contactPersonName": {
+          "type": "string",
+          "description": "The name of the contact person for the business."
+        },
+        "contactEmail": {
+          "type": "string",
+          "description": "The email address of the contact person.",
+          "format": "email"
+        },
+        "contactPhone": {
+          "type": "string",
+          "description": "The phone number of the contact person."
+        },
+        "goodsServicesType": {
+          "type": "string",
+          "description": "The type of goods or services the business is requesting to procure (e.g., Raw Materials, IT Services)."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the procurement needs."
+        },
+        "budget": {
+          "type": "string",
+          "description": "The estimated budget for the procurement, if specified. Stored as a string to accommodate various formats (e.g., currency, ranges, 'N/A')."
+        },
+        "timeline": {
+          "type": "string",
+          "description": "The desired timeline for the procurement process."
+        },
+        "fileUrls": {
+          "type": "array",
+          "description": "An array of URLs to files uploaded by the client related to the request.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the procurement request (e.g., 'New', 'Pending Review', 'Awaiting Client Info', 'In Progress', 'Completed', 'Archived')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the procurement request was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the procurement request was last updated.",
+          "format": "date-time"
+        },
+        "adminNotes": {
+          "type": "string",
+          "description": "Internal notes added by administrators regarding the request, which may include AI clarification suggestions."
+        }
+      },
+      "required": [
+        "id",
+        "businessName",
+        "contactPersonName",
+        "contactEmail",
+        "goodsServicesType",
+        "description",
+        "status",
+        "createdAt"
+      ]
+    },
+    "ContactMessage": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ContactMessage",
+      "type": "object",
+      "description": "Represents a message submitted through the website's general contact form.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ContactMessage entity."
+        },
+        "senderName": {
+          "type": "string",
+          "description": "The name of the person sending the message."
+        },
+        "senderEmail": {
+          "type": "string",
+          "description": "The email address of the person sending the message.",
+          "format": "email"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject line of the contact message."
+        },
+        "message": {
+          "type": "string",
+          "description": "The content of the message."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the message was sent.",
+          "format": "date-time"
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "Indicates whether the message has been marked as read by an administrator."
+        }
+      },
+      "required": [
+        "id",
+        "senderName",
+        "senderEmail",
+        "message",
+        "createdAt",
+        "isRead"
+      ]
+    },
+    "Service": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Service",
+      "type": "object",
+      "description": "Defines the various procurement and sourcing services offered by D'LEGACIES.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Service entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the procurement service (e.g., 'Business Procurement Solutions')."
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": "A brief summary of the service."
+        },
+        "longDescription": {
+          "type": "string",
+          "description": "A detailed description of the service, potentially for a dedicated service page."
+        },
+        "iconClass": {
+          "type": "string",
+          "description": "A CSS class or identifier for an icon representing the service (e.g., 'icon-logistics')."
+        },
+        "displayOrder": {
+          "type": "number",
+          "description": "A numerical value to determine the display order of services on the website."
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Indicates whether the service is currently active and should be displayed on the website."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the service record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the service record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "shortDescription",
+        "longDescription",
+        "displayOrder",
+        "isActive",
+        "createdAt"
+      ]
+    },
+    "BusinessInfo": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BusinessInfo",
+      "type": "object",
+      "description": "Stores core business information and contact details for D'LEGACIES. This is typically a singleton entity (only one record).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the BusinessInfo entity (e.g., 'main')."
+        },
+        "businessName": {
+          "type": "string",
+          "description": "The full legal name of the business (e.g., D'LEGACIES E-PROCUREMENT CONSULT)."
+        },
+        "brandName": {
+          "type": "string",
+          "description": "The primary brand name (e.g., D'LEGACIES)."
+        },
+        "locationAddress": {
+          "type": "string",
+          "description": "The physical location address of the business (e.g., Accra, Ghana)."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "The primary contact phone number."
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "The primary contact email address.",
+          "format": "email"
+        },
+        "businessType": {
+          "type": "string",
+          "description": "The type of business (e.g., 'Procurement Consulting')."
+        },
+        "coreServiceDescription": {
+          "type": "string",
+          "description": "A concise description of the core services offered by the business."
+        },
+        "googleMapsEmbedUrl": {
+          "type": "string",
+          "description": "The URL for embedding a Google Map of the business location.",
+          "format": "uri"
+        },
+        "whatsAppNumber": {
+          "type": "string",
+          "description": "The phone number used for WhatsApp integration."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the business information was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "businessName",
+        "brandName",
+        "locationAddress",
+        "phoneNumber",
+        "emailAddress",
+        "businessType",
+        "coreServiceDescription",
+        "updatedAt"
+      ]
+    },
+    "WebsiteContentSection": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WebsiteContentSection",
+      "type": "object",
+      "description": "Stores editable content blocks for various sections of the website, managed via the admin dashboard.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the WebsiteContentSection entity (e.g., 'home-hero-tagline', 'about-mission')."
+        },
+        "sectionKey": {
+          "type": "string",
+          "description": "A programmatic key to identify this content section on the frontend (e.g., 'heroTagline', 'missionStatement')."
+        },
+        "page": {
+          "type": "string",
+          "description": "The website page where this content section is primarily displayed (e.g., 'Home', 'About', 'Services')."
+        },
+        "title": {
+          "type": "string",
+          "description": "A human-readable title for the content section, primarily for admin dashboard use."
+        },
+        "contentHtml": {
+          "type": "string",
+          "description": "The HTML content for this section, allowing for rich text and formatting."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the content section was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "sectionKey",
+        "page",
+        "title",
+        "contentHtml",
+        "updatedAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/procurementRequests/{requestId}",
+        "definition": {
+          "entityName": "ProcurementRequest",
+          "schema": {
+            "$ref": "#/backend/entities/ProcurementRequest"
+          },
+          "description": "Stores individual procurement service requests submitted by businesses. Anonymous users can create. Administrators can read, update, and delete. Access rules for admins are independent, relying on the existence of their UID in the /roles_admin collection, not on data within this collection itself. Supports QAPs for admin listing."
+        }
+      },
+      {
+        "path": "/contactMessages/{messageId}",
+        "definition": {
+          "entityName": "ContactMessage",
+          "schema": {
+            "$ref": "#/backend/entities/ContactMessage"
+          },
+          "description": "Stores general contact messages submitted through the website. Anonymous users can create. Administrators can read, update (e.g., mark as read), and delete. Access rules for admins are independent, relying on the existence of their UID in the /roles_admin collection. Supports QAPs for admin listing."
+        }
+      },
+      {
+        "path": "/services/{serviceId}",
+        "definition": {
+          "entityName": "Service",
+          "schema": {
+            "$ref": "#/backend/entities/Service"
+          },
+          "description": "Stores information about the procurement and sourcing services offered. All users (authenticated/unauthenticated) have read-only access for public display. Administrators have full create, read, update, and delete access to manage these services. Supports QAPs for public listing."
+        }
+      },
+      {
+        "path": "/businessInfo/main",
+        "definition": {
+          "entityName": "BusinessInfo",
+          "schema": {
+            "$ref": "#/backend/entities/BusinessInfo"
+          },
+          "description": "A singleton document storing core business contact and descriptive information (e.g., phone, email, location). All users have read-only access. Administrators have update access. No wildcards as it's a single document. Supports QAPs for public retrieval."
+        }
+      },
+      {
+        "path": "/websiteContent/{sectionId}",
+        "definition": {
+          "entityName": "WebsiteContentSection",
+          "schema": {
+            "$ref": "#/backend/entities/WebsiteContentSection"
+          },
+          "description": "Stores editable content blocks for various sections of the website (e.g., hero taglines, about page mission). All users have read-only access for public display. Administrators have full create, read, update, and delete access. Supports QAPs for public listing."
+        }
+      },
+      {
+        "path": "/roles_admin/{adminId}",
+        "definition": {
+          "entityName": "roles_admin",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Manages administrator roles. The existence of a document with a Firebase Auth UID as its ID grants administrative privileges. This enforces Database Access Control (DBAC). Only existing administrators can create, update, or delete documents in this collection to manage other admin users. Authorization is fully independent, relying on the `request.auth.uid` matching a document ID in this collection.",
+          "params": [
+            {
+              "name": "adminId",
+              "description": "The Firebase Authentication UID of the administrator."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The recommended Firestore structure for D'LEGACIES Procurement Website prioritizes security, scalability, and debuggability by strictly adhering to the core design principles. This design avoids hierarchical authorization dependencies (Authorization Independence) and ensures clear, debuggable security rules.The structure segregates data into distinct collections based on their security posture and access patterns:\n\n1.  \"/procurementRequests/{requestId}\" and \"/contactMessages/{messageId}\": These collections store user-submitted data. Anonymous users can create new documents. Once created, these documents are managed exclusively by administrators (read, update, delete). Authorization Independence is maintained because the rules for creating these documents do not depend on any parent documents; they are self-contained. For read/update/delete, access is granted solely based on the user being an 'admin', which is determined by a separate, independent check against the '/roles_admin' collection, not by looking up fields within the request or message document itself. This fully supports QAPs (Queries as Permissions) for administrators, allowing them to `list` all requests or messages securely without complex filtering logic in the rules.\n\n2.  \"/services/{serviceId}\", \"/businessInfo/main\", and \"/websiteContent/{sectionId}\": These collections store public-facing website content. All authenticated and unauthenticated users have read-only access to these documents, enabling efficient data fetching for the website's frontend. Administrators have full create, read, update, and delete privileges to manage this content via the admin dashboard. This structural segregation ensures that public data can be served without any authentication checks, simplifying rules and improving performance for the vast majority of website visitors. QAPs are fully supported, as any user can `list` the services or website content without security concerns; the data is intentionally public.\n\n3.  \"/roles_admin/{adminId}\": This dedicated collection implements Database Access Control (DBAC) for administrative roles. An administrator's status is determined solely by the existence of a document in this collection whose ID matches their Firebase Authentication UID (`request.auth.uid`). This completely eliminates the need for custom claims or `get()` calls to check user roles within other collections' rules. It's a clear example of Authorization Independence and simplifies rule logic immensely: `allow read: if request.auth.uid != null && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));`. This structure ensures that administrative privileges are explicit, easily auditable, and atomic."
+  }
+}
