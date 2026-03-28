@@ -2,37 +2,64 @@
 "use client";
 
 import { useState } from "react";
+import { useFirestore } from "@/firebase";
+import { addDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Phone, Mail, MapPin, MessageCircle, Send, Clock, Globe } from "lucide-react";
+import { collection, serverTimestamp } from "firebase/firestore";
+import { Phone, Mail, MapPin, MessageCircle, Send, Clock, Globe, Loader2 } from "lucide-react";
 
 export default function ContactPage() {
+  const db = useFirestore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast({
-      title: "Message Sent",
-      description: "Thank you for reaching out. We'll get back to you shortly.",
-    });
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      senderName: formData.get("name") as string,
+      senderEmail: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+      isRead: false,
+      createdAt: serverTimestamp(),
+    };
+
+    try {
+      const colRef = collection(db, "contactMessages");
+      // Use the non-blocking pattern for immediate UI response
+      addDocumentNonBlocking(colRef, data);
+      
+      toast({
+        title: "Message Transmitted",
+        description: "Your inquiry has been logged. Our team will contact you shortly.",
+      });
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Transmission Error",
+        description: "We couldn't send your message at this time. Please try WhatsApp.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="flex flex-col">
       {/* Header */}
-      <section className="bg-primary py-20">
+      <section className="bg-primary py-32">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">Get in Touch</h1>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto">
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter">Get in Touch</h1>
+          <p className="text-white/60 text-xl max-w-2xl mx-auto font-medium">
             Have questions about our procurement services? We're here to help. Reach out through any of the channels below.
           </p>
         </div>
@@ -40,24 +67,24 @@ export default function ContactPage() {
 
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             
             {/* Contact Info */}
-            <div className="space-y-8">
-              <h2 className="text-3xl font-bold text-primary">Contact Information</h2>
-              <div className="space-y-6">
+            <div className="space-y-10">
+              <h2 className="text-3xl font-black text-primary tracking-tight">Corporate Contact</h2>
+              <div className="space-y-8">
                 {[
-                  { icon: <Phone />, label: "Phone", value: "0557759388", link: "tel:233557759388" },
-                  { icon: <Mail />, label: "Email", value: "dlegacies75@yahoo.com", link: "mailto:dlegacies75@yahoo.com" },
-                  { icon: <MapPin />, label: "Location", value: "Accra, Ghana", link: "#" },
-                  { icon: <Clock />, label: "Business Hours", value: "Mon - Fri, 8AM - 5PM", link: "#" }
+                  { icon: <Phone className="text-secondary" />, label: "Direct Line", value: "0557759388", link: "tel:233557759388" },
+                  { icon: <Mail className="text-secondary" />, label: "Official Email", value: "dlegacies75@yahoo.com", link: "mailto:dlegacies75@yahoo.com" },
+                  { icon: <MapPin className="text-secondary" />, label: "Headquarters", value: "Accra, Ghana", link: "#" },
+                  { icon: <Clock className="text-secondary" />, label: "Operational Hours", value: "Mon - Fri, 8AM - 5PM", link: "#" }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start space-x-4">
-                    <div className="p-3 bg-white text-primary rounded-xl shadow-sm border border-muted">
+                  <div key={i} className="flex items-start space-x-5">
+                    <div className="p-4 bg-white rounded-2xl shadow-xl border border-muted">
                       {item.icon}
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground font-medium">{item.label}</p>
+                      <p className="text-xs text-muted-foreground font-black uppercase tracking-widest mb-1">{item.label}</p>
                       {item.link !== "#" ? (
                         <a href={item.link} className="text-lg font-bold text-primary hover:text-secondary transition-colors">
                           {item.value}
@@ -71,9 +98,9 @@ export default function ContactPage() {
               </div>
 
               <div className="pt-8">
-                <Button asChild size="lg" className="bg-[#25D366] hover:bg-[#25D366]/90 text-white font-bold w-full shadow-lg">
+                <Button asChild size="lg" className="bg-[#25D366] hover:bg-[#25D366]/90 text-white font-black w-full h-16 rounded-2xl shadow-2xl shadow-[#25D366]/20 text-lg">
                   <a href="https://wa.me/233557759388" target="_blank" className="flex items-center justify-center">
-                    <MessageCircle className="mr-2 h-6 w-6" /> Chat on WhatsApp
+                    <MessageCircle className="mr-3 h-6 w-6" /> Priority WhatsApp Chat
                   </a>
                 </Button>
               </div>
@@ -81,34 +108,40 @@ export default function ContactPage() {
 
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <Card className="shadow-2xl border-none">
-                <CardContent className="p-8 md:p-12">
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Full Name</Label>
-                        <Input id="name" placeholder="Kwame Mensah" required />
+              <Card className="shadow-[0_40px_80px_-15px_rgba(0,0,0,0.1)] border-none rounded-[3rem] overflow-hidden">
+                <div className="h-3 bg-secondary w-full"></div>
+                <CardContent className="p-10 md:p-16">
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <div className="space-y-3">
+                        <Label htmlFor="name" className="font-black text-primary uppercase text-[10px] tracking-[0.2em]">Full Name / Organization</Label>
+                        <Input name="name" id="name" placeholder="John Doe" required className="h-14 bg-muted/30 border-none rounded-2xl focus:bg-white transition-all text-lg" />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" type="email" placeholder="kwame@example.com" required />
+                      <div className="space-y-3">
+                        <Label htmlFor="email" className="font-black text-primary uppercase text-[10px] tracking-[0.2em]">Email Address</Label>
+                        <Input name="email" id="email" type="email" placeholder="john@example.com" required className="h-14 bg-muted/30 border-none rounded-2xl focus:bg-white transition-all text-lg" />
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="subject">Subject</Label>
-                      <Input id="subject" placeholder="General Inquiry" required />
+                    <div className="space-y-3">
+                      <Label htmlFor="subject" className="font-black text-primary uppercase text-[10px] tracking-[0.2em]">Subject of Inquiry</Label>
+                      <Input name="subject" id="subject" placeholder="Partnership Opportunity" required className="h-14 bg-muted/30 border-none rounded-2xl focus:bg-white transition-all text-lg" />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="message">Your Message</Label>
+                    <div className="space-y-3">
+                      <Label htmlFor="message" className="font-black text-primary uppercase text-[10px] tracking-[0.2em]">Detailed Message</Label>
                       <Textarea 
+                        name="message"
                         id="message" 
-                        placeholder="How can we help you today?" 
-                        className="min-h-[150px]" 
+                        placeholder="Please describe your requirements or questions..." 
+                        className="min-h-[180px] bg-muted/30 border-none rounded-2xl focus:bg-white transition-all text-lg"
                         required 
                       />
                     </div>
-                    <Button type="submit" disabled={isSubmitting} size="lg" className="w-full bg-primary hover:bg-primary/90">
-                      {isSubmitting ? "Sending..." : <><Send className="mr-2 h-5 w-5" /> Send Message</>}
+                    <Button type="submit" disabled={isSubmitting} size="lg" className="w-full h-16 bg-primary text-white font-black rounded-2xl text-xl shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                      {isSubmitting ? (
+                        <Loader2 className="animate-spin h-6 w-6" />
+                      ) : (
+                        <><Send className="mr-3 h-6 w-6" /> Transmit Message</>
+                      )}
                     </Button>
                   </form>
                 </CardContent>
@@ -118,13 +151,13 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Google Map Mockup */}
-      <section className="h-[450px] bg-muted relative overflow-hidden">
+      {/* Map Section */}
+      <section className="h-[500px] bg-muted relative overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center">
-           <div className="text-center">
-             <Globe className="h-16 w-16 text-primary opacity-20 mx-auto mb-4" />
-             <h3 className="text-xl font-bold text-primary">Accra Head Office</h3>
-             <p className="text-muted-foreground">Interactive Map Placeholder</p>
+           <div className="text-center space-y-4">
+             <Globe className="h-20 w-20 text-primary opacity-10 mx-auto" />
+             <h3 className="text-2xl font-black text-primary tracking-tighter opacity-20">Accra Head Office</h3>
+             <p className="text-muted-foreground font-bold tracking-widest text-xs opacity-20 uppercase">Ghana Business Hub Integrated</p>
            </div>
         </div>
       </section>
