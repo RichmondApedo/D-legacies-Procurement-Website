@@ -23,14 +23,16 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-16 items-center">
             <div className="lg:w-1/2">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-video lg:aspect-square">
-                <Image
-                  src={teamImg?.imageUrl || ""}
-                  alt={teamImg?.description || ""}
-                  fill
-                  className="object-cover"
-                  data-ai-hint={teamImg?.imageHint}
-                />
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-video lg:aspect-square bg-muted">
+                {teamImg?.imageUrl && (
+                  <Image
+                    src={teamImg.imageUrl}
+                    alt={teamImg.description || "Our Team"}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={teamImg.imageHint}
+                  />
+                )}
                 <div className="absolute inset-0 bg-primary/20"></div>
               </div>
             </div>

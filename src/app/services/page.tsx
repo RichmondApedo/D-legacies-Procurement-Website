@@ -122,14 +122,16 @@ export default function ServicesPage() {
       {/* Logistics Banner */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
-          <div className="relative rounded-3xl overflow-hidden min-h-[400px] flex items-center">
-            <Image
-              src={warehouseImg?.imageUrl || ""}
-              alt={warehouseImg?.description || ""}
-              fill
-              className="object-cover"
-              data-ai-hint={warehouseImg?.imageHint}
-            />
+          <div className="relative rounded-3xl overflow-hidden min-h-[400px] flex items-center bg-muted">
+            {warehouseImg?.imageUrl && (
+              <Image
+                src={warehouseImg.imageUrl}
+                alt={warehouseImg.description || "Warehouse Logistics"}
+                fill
+                className="object-cover"
+                data-ai-hint={warehouseImg.imageHint}
+              />
+            )}
             <div className="absolute inset-0 bg-primary/80"></div>
             <div className="relative z-10 p-8 md:p-20 max-w-2xl text-white">
               <h3 className="text-3xl font-bold mb-6">Streamlined Logistics Management</h3>

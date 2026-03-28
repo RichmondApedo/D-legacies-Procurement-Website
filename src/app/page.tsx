@@ -7,19 +7,22 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function Home() {
   const heroImg = PlaceHolderImages.find(img => img.id === "hero-consulting");
+  const sourcingImg = PlaceHolderImages.find(img => img.id === "sourcing-logistics");
 
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative min-h-[95vh] flex items-center overflow-hidden bg-primary">
         <div className="absolute inset-0 z-0">
-          <Image
-            src={heroImg?.imageUrl || ""}
-            alt="D'LEGACIES Consulting"
-            fill
-            className="object-cover opacity-40 mix-blend-overlay"
-            priority
-          />
+          {heroImg?.imageUrl && (
+            <Image
+              src={heroImg.imageUrl}
+              alt="D'LEGACIES Consulting"
+              fill
+              className="object-cover opacity-40 mix-blend-overlay"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-tr from-primary via-primary/80 to-transparent"></div>
         </div>
 
@@ -123,13 +126,15 @@ export default function Home() {
             </div>
             
             <div className="lg:w-1/2 relative">
-              <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-3xl">
-                <Image
-                  src={PlaceHolderImages.find(img => img.id === "sourcing-logistics")?.imageUrl || ""}
-                  alt="Supply Chain Strategy"
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-3xl bg-muted">
+                {sourcingImg?.imageUrl && (
+                  <Image
+                    src={sourcingImg.imageUrl}
+                    alt="Supply Chain Strategy"
+                    fill
+                    className="object-cover"
+                  />
+                )}
               </div>
               <div className="absolute -bottom-10 -left-10 glass-card p-10 rounded-3xl max-w-xs hidden md:block">
                 <p className="text-2xl font-black text-primary mb-2">12%</p>
