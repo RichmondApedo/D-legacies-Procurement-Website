@@ -1,7 +1,8 @@
-
 "use client";
 
 import { useState } from "react";
+import { useFirestore, useCollection } from "@/firebase";
+import { collection, query, orderBy } from "firebase/firestore";
 import { 
   LayoutDashboard, 
   ShoppingCart, 
@@ -10,11 +11,12 @@ import {
   Settings, 
   Search,
   Filter,
-  Eye,
   MoreVertical,
   CheckCircle2,
   Clock,
-  Sparkles
+  Sparkles,
+  Loader2,
+  ArrowRight
 } from "lucide-react";
 import { 
   Table, 
@@ -27,251 +29,183 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { adminProcurementRequestClarifier, AdminProcurementRequestClarifierOutput } from "@/ai/flows/admin-procurement-request-clarifier";
-
-// Mock Data
-const MOCK_REQUESTS = [
-  {
-    id: "REQ-001",
-    business: "Tech Ghana Ltd",
-    client: "Kwame Mensah",
-    needs: "50x Dell Latitude Laptops",
-    status: "Pending",
-    date: "2024-05-20",
-    budget: "GHS 150,000",
-    timeline: "2 Weeks",
-    description: "High-performance laptops for software developers. Need i7 processor, 16GB RAM, 512GB SSD. Prefers Dell but open to Lenovo."
-  },
-  {
-    id: "REQ-002",
-    business: "Accra Logistics",
-    client: "Abena Serwaa",
-    needs: "Fleet Maintenance Services",
-    status: "Clarifying",
-    date: "2024-05-18",
-    budget: "GHS 25,000/mo",
-    timeline: "Immediate",
-    description: "Monthly maintenance for 10 delivery vans. Includes oil changes, tire rotations, and general inspections."
-  },
-  {
-    id: "REQ-003",
-    business: "Green Growth Farm",
-    client: "Kofi Owusu",
-    needs: "Industrial Irrigation System",
-    status: "Completed",
-    date: "2024-05-15",
-    budget: "GHS 85,000",
-    timeline: "1 Month",
-    description: "Solar-powered irrigation system for a 5-acre farm. Need high-efficiency pumps and durable piping."
-  }
-];
+import { format } from "date-fns";
 
 export default function AdminDashboard() {
-  const [requests] = useState(MOCK_REQUESTS);
-  const [selectedRequest, setSelectedRequest] = useState<typeof MOCK_REQUESTS[0] | null>(null);
-  const [aiAnalysis, setAiAnalysis] = useState<AdminProcurementRequestClarifierOutput | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const db = useFirestore();
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const requestsQuery = query(
+    collection(db, "procurementRequests"),
+    orderBy("createdAt", "desc")
+  );
+  
+  const { data: requests, isLoading } = useCollection(requestsQuery as any);
 
-  const runAiAnalysis = async (request: typeof MOCK_REQUESTS[0]) => {
-    setIsAnalyzing(true);
-    setSelectedRequest(request);
-    try {
-      const result = await adminProcurementRequestClarifier({
-        businessName: request.business,
-        contactDetails: `${request.client}, ${request.business}`,
-        goodsServicesNeeded: request.needs,
-        procurementDescription: request.description,
-        budget: request.budget,
-        timeline: request.timeline
-      });
-      setAiAnalysis(result);
-    } catch (error) {
-      console.error("AI Analysis failed", error);
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
+  const filteredRequests = requests?.filter(req => 
+    req.businessName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    req.goodsServicesType?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="flex min-h-screen bg-muted/30">
-      {/* Sidebar - Static for simplicity */}
-      <aside className="w-64 bg-primary text-white p-6 hidden lg:block">
-        <div className="mb-10">
-          <h2 className="text-xl font-bold">D&apos;LEGACIES Admin</h2>
+      {/* Sidebar - Static */}
+      <aside className="w-72 bg-primary text-white p-8 hidden lg:flex flex-col">
+        <div className="mb-12">
+          <h2 className="text-2xl font-black tracking-tighter">D&apos;LEGACIES</h2>
+          <p className="text-[10px] font-bold text-secondary uppercase tracking-[0.3em]">Command Center</p>
         </div>
-        <nav className="space-y-4">
-          <LinkButton icon={<LayoutDashboard size={20} />} label="Overview" active />
-          <LinkButton icon={<ShoppingCart size={20} />} label="Procurement Requests" />
-          <LinkButton icon={<MessageSquare size={20} />} label="General Messages" />
-          <LinkButton icon={<Users size={20} />} label="Clients" />
-          <LinkButton icon={<Settings size={20} />} label="Settings" />
+        <nav className="space-y-2 flex-1">
+          <NavItem icon={<LayoutDashboard size={20} />} label="Overview" active />
+          <NavItem icon={<ShoppingCart size={20} />} label="Procurement Leads" />
+          <NavItem icon={<MessageSquare size={20} />} label="Support Inbox" />
+          <NavItem icon={<Users size={20} />} label="Client Directory" />
+          <NavItem icon={<Settings size={20} />} label="Platform Config" />
         </nav>
+        <div className="pt-8 border-t border-white/10 text-white/40 text-xs">
+          © 2024 D&apos;LEGACIES Admin
+        </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
-        <header className="flex justify-between items-center mb-8">
+      <main className="flex-1 p-8 lg:p-12">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
-            <h1 className="text-3xl font-bold text-primary">Procurement Requests</h1>
-            <p className="text-muted-foreground">Manage incoming client sourcing requests.</p>
+            <h1 className="text-4xl font-bold text-primary tracking-tight">Procurement Console</h1>
+            <p className="text-muted-foreground mt-1 font-medium">Monitoring and processing active sourcing requests.</p>
           </div>
-          <div className="flex space-x-2">
-            <Button variant="outline" className="bg-white">
-              <Filter className="mr-2 h-4 w-4" /> Filter
+          <div className="flex space-x-3">
+            <Button variant="outline" className="bg-white rounded-xl shadow-sm border-none font-bold">
+              <Filter className="mr-2 h-4 w-4" /> Filter Views
             </Button>
-            <Button className="bg-secondary text-primary font-bold">
-              Export CSV
+            <Button className="bg-secondary text-primary font-black rounded-xl shadow-lg shadow-secondary/20">
+              Generate Report
             </Button>
           </div>
         </header>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <StatCard title="Total Requests" value="48" icon={<ShoppingCart />} color="bg-blue-500" />
-          <StatCard title="Active Sourcing" value="12" icon={<Clock />} color="bg-orange-500" />
-          <StatCard title="Monthly Revenue" value="GHS 240k" icon={<CheckCircle2 />} color="bg-green-500" />
+        {/* Dashboard Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <StatCard title="Total Leads" value={requests?.length.toString() || "0"} icon={<ShoppingCart />} color="bg-blue-600" />
+          <StatCard title="Pending Review" value={requests?.filter(r => r.status === "New").length.toString() || "0"} icon={<Clock />} color="bg-amber-500" />
+          <StatCard title="Successful Fulfillment" value="28" icon={<CheckCircle2 />} color="bg-emerald-600" />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          {/* Requests Table */}
-          <div className="xl:col-span-2 space-y-4">
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-              <div className="p-4 border-b flex items-center justify-between">
-                <div className="relative w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search requests..." className="pl-10" />
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-12">
+          {/* Requests Main Panel */}
+          <div className="xl:col-span-3 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl shadow-primary/5 border-none overflow-hidden">
+              <div className="p-8 border-b flex items-center justify-between">
+                <div className="relative w-full max-w-md">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input 
+                    placeholder="Search by business or requirement..." 
+                    className="pl-12 h-12 bg-muted/40 border-none rounded-2xl focus:bg-white transition-all" 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
                 </div>
               </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Request ID</TableHead>
-                    <TableHead>Business/Client</TableHead>
-                    <TableHead>Requirement</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {requests.map((req) => (
-                    <TableRow key={req.id}>
-                      <TableCell className="font-mono text-xs">{req.id}</TableCell>
-                      <TableCell>
-                        <div className="font-medium">{req.business}</div>
-                        <div className="text-xs text-muted-foreground">{req.client}</div>
-                      </TableCell>
-                      <TableCell className="max-w-[200px] truncate">{req.needs}</TableCell>
-                      <TableCell>
-                        <Badge variant={
-                          req.status === "Pending" ? "outline" : 
-                          req.status === "Completed" ? "default" : "secondary"
-                        }>
-                          {req.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Button variant="ghost" size="icon" onClick={() => runAiAnalysis(req)}>
-                            <Sparkles className="h-4 w-4 text-secondary" />
-                          </Button>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon"><MoreVertical className="h-4 w-4" /></Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>View Details</DropdownMenuItem>
-                              <DropdownMenuItem>Update Status</DropdownMenuItem>
-                              <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </TableCell>
+
+              {isLoading ? (
+                <div className="p-24 text-center">
+                  <Loader2 className="h-10 w-10 animate-spin text-secondary mx-auto mb-4" />
+                  <p className="font-bold text-primary/60">Synchronizing with Secure Database...</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader className="bg-muted/30">
+                    <TableRow className="hover:bg-transparent">
+                      <TableHead className="py-6 pl-8 font-black uppercase text-[10px] tracking-widest">Business/Client</TableHead>
+                      <TableHead className="font-black uppercase text-[10px] tracking-widest">Requirement</TableHead>
+                      <TableHead className="font-black uppercase text-[10px] tracking-widest">Received</TableHead>
+                      <TableHead className="font-black uppercase text-[10px] tracking-widest">Status</TableHead>
+                      <TableHead className="text-right pr-8 font-black uppercase text-[10px] tracking-widest">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredRequests?.map((req) => (
+                      <TableRow key={req.id} className="hover:bg-muted/10 transition-colors">
+                        <TableCell className="py-6 pl-8">
+                          <div className="font-bold text-primary">{req.businessName}</div>
+                          <div className="text-xs text-muted-foreground font-medium">{req.contactPersonName}</div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="font-semibold text-primary/80 max-w-[240px] truncate">{req.goodsServicesType}</div>
+                          <div className="text-[10px] text-muted-foreground bg-muted px-2 py-0.5 rounded w-fit mt-1">Timeline: {req.timeline}</div>
+                        </TableCell>
+                        <TableCell className="text-sm font-medium text-primary/60">
+                          {req.createdAt ? format(req.createdAt.toDate(), "MMM dd, HH:mm") : "N/A"}
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={cn(
+                            "rounded-lg font-bold px-3 py-1",
+                            req.status === "New" ? "bg-amber-500/10 text-amber-600 border-amber-200" : "bg-emerald-500/10 text-emerald-600 border-emerald-200"
+                          )}>
+                            {req.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right pr-8">
+                          <Button variant="ghost" size="icon" className="hover:bg-secondary/20 hover:text-primary transition-colors">
+                            <ArrowRight size={20} />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {filteredRequests?.length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={5} className="py-24 text-center text-muted-foreground font-bold italic">
+                          No matching procurement requests found in the current ledger.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              )}
             </div>
           </div>
 
-          {/* AI Insights Panel */}
-          <div className="space-y-6">
-            <Card className="border-secondary border-t-4">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center">
-                  <Sparkles className="mr-2 h-5 w-5 text-secondary" />
-                  AI Request Clarifier
+          {/* AI Insights Sidebar */}
+          <div className="xl:col-span-1 space-y-8">
+            <Card className="border-none shadow-xl shadow-secondary/10 bg-gradient-to-br from-primary to-primary/95 text-white rounded-3xl overflow-hidden">
+              <CardHeader className="pb-4 border-b border-white/10">
+                <CardTitle className="text-xl flex items-center">
+                  <Sparkles className="mr-3 h-6 w-6 text-secondary" />
+                  Sourcing AI
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {isAnalyzing ? (
-                  <div className="py-12 text-center">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-sm text-muted-foreground">Gemini is analyzing the request details...</p>
-                  </div>
-                ) : aiAnalysis ? (
-                  <div className="space-y-4 animate-in fade-in duration-500">
-                    <div>
-                      <h4 className="font-bold text-sm text-primary mb-1">Request Summary</h4>
-                      <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">{aiAnalysis.summaryOfRequest}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-primary mb-1">Identified Ambiguities</h4>
-                      <ul className="list-disc pl-4 text-xs space-y-1 text-muted-foreground">
-                        {aiAnalysis.identifiedAmbiguities.map((point, i) => (
-                          <li key={i}>{point}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-secondary mb-1">Suggested Follow-up</h4>
-                      <div className="space-y-2">
-                        {aiAnalysis.suggestedQuestions.map((q, i) => (
-                          <div key={i} className="text-xs p-2 border rounded border-secondary/30 bg-secondary/5 italic">
-                            &quot;{q}&quot;
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <Button className="w-full bg-secondary text-primary font-bold">Copy Response Draft</Button>
-                  </div>
-                ) : (
-                  <div className="py-12 text-center border-2 border-dashed rounded-xl">
-                    <ShoppingCart className="h-10 w-10 text-muted-foreground mx-auto mb-2 opacity-20" />
-                    <p className="text-sm text-muted-foreground px-6">Select a request and click the sparkles icon to generate AI insights.</p>
-                  </div>
-                )}
+              <CardContent className="pt-8 space-y-6">
+                <div className="p-5 bg-white/5 rounded-2xl border border-white/10">
+                  <h4 className="font-black text-[10px] uppercase tracking-widest text-secondary mb-3">Strategy Insight</h4>
+                  <p className="text-sm text-white/80 leading-relaxed italic">
+                    &quot;Consolidating high-end laptop requests from the past 7 days could yield a 12% reduction in logistics overhead via unified freight.&quot;
+                  </p>
+                </div>
+                <Button className="w-full bg-secondary text-primary font-black rounded-xl h-12 hover:bg-secondary/90">
+                  Analyze All Requirements
+                </Button>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <div className="bg-white rounded-3xl p-8 premium-shadow border">
+              <h3 className="text-lg font-bold text-primary mb-6">Recent System Activity</h3>
+              <div className="space-y-6">
                 {[
-                  { user: "Admin", action: "Updated REQ-003 status", time: "2 hrs ago" },
-                  { user: "System", action: "New request from Tech Ghana", time: "5 hrs ago" },
-                  { user: "Admin", action: "Sent message to Kwame", time: "Yesterday" }
-                ].map((act, i) => (
-                  <div key={i} className="flex items-start space-x-3 text-sm">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0"></div>
+                  { user: "System", action: "Database Synced", time: "2 min ago" },
+                  { user: "Admin", action: "Updated REQ-928", time: "1 hr ago" },
+                  { user: "Lead", action: "New Inquiry Recieved", time: "3 hrs ago" }
+                ].map((log, i) => (
+                  <div key={i} className="flex items-start space-x-4">
+                    <div className="w-2 h-2 rounded-full bg-secondary mt-2 shrink-0"></div>
                     <div>
-                      <p className="font-medium">{act.action}</p>
-                      <p className="text-xs text-muted-foreground">{act.time}</p>
+                      <p className="text-sm font-bold text-primary">{log.action}</p>
+                      <p className="text-xs text-muted-foreground font-medium">{log.time}</p>
                     </div>
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -279,24 +213,29 @@ export default function AdminDashboard() {
   );
 }
 
-function LinkButton({ icon, label, active = false }: { icon: React.ReactNode, label: string, active?: boolean }) {
+function NavItem({ icon, label, active = false }: { icon: React.ReactNode, label: string, active?: boolean }) {
   return (
-    <button className={`flex items-center space-x-3 w-full p-3 rounded-lg transition-colors ${active ? 'bg-secondary text-primary font-bold' : 'hover:bg-white/10 text-white/80'}`}>
+    <button className={cn(
+      "flex items-center space-x-4 w-full p-4 rounded-2xl transition-all duration-300 font-bold",
+      active 
+        ? "bg-secondary text-primary shadow-lg shadow-secondary/10" 
+        : "text-white/60 hover:text-white hover:bg-white/5"
+    )}>
       {icon}
-      <span>{label}</span>
+      <span className="text-sm">{label}</span>
     </button>
   );
 }
 
 function StatCard({ title, value, icon, color }: { title: string, value: string, icon: React.ReactNode, color: string }) {
   return (
-    <Card>
-      <CardContent className="p-6 flex items-center justify-between">
+    <Card className="border-none premium-shadow rounded-3xl overflow-hidden">
+      <CardContent className="p-8 flex items-center justify-between">
         <div>
-          <p className="text-sm text-muted-foreground mb-1">{title}</p>
-          <p className="text-2xl font-bold text-primary">{value}</p>
+          <p className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2">{title}</p>
+          <p className="text-4xl font-black text-primary tracking-tighter">{value}</p>
         </div>
-        <div className={`p-3 rounded-xl text-white ${color}`}>
+        <div className={cn("p-5 rounded-2xl text-white shadow-xl", color)}>
           {icon}
         </div>
       </CardContent>

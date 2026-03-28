@@ -1,28 +1,28 @@
 {
   "placeholderImages": [
     {
-      "id": "hero-procurement",
-      "description": "Professional business team discussing procurement strategy",
+      "id": "hero-consulting",
+      "description": "Professional procurement consulting session in a modern office",
       "imageUrl": "https://picsum.photos/seed/dlegacies1/1200/800",
-      "imageHint": "business procurement"
-    },
-    {
-      "id": "sourcing-service",
-      "description": "Logistics and sourcing management",
-      "imageUrl": "https://picsum.photos/seed/dlegacies2/800/600",
-      "imageHint": "global sourcing"
-    },
-    {
-      "id": "consulting-team",
-      "description": "Consultants in a modern office in Accra",
-      "imageUrl": "https://picsum.photos/seed/dlegacies3/800/600",
       "imageHint": "business consulting"
     },
     {
-      "id": "warehouse-logistics",
-      "description": "Modern warehouse and supply chain",
+      "id": "sourcing-logistics",
+      "description": "Global sourcing and logistics network map",
+      "imageUrl": "https://picsum.photos/seed/dlegacies2/800/600",
+      "imageHint": "global logistics"
+    },
+    {
+      "id": "office-accra",
+      "description": "Corporate office building in Accra Ghana",
+      "imageUrl": "https://picsum.photos/seed/dlegacies3/800/600",
+      "imageHint": "accra office"
+    },
+    {
+      "id": "procurement-process",
+      "description": "Hands shaking over a procurement contract",
       "imageUrl": "https://picsum.photos/seed/dlegacies4/800/600",
-      "imageHint": "logistics warehouse"
+      "imageHint": "business agreement"
     }
   ]
 }
