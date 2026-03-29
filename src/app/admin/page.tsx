@@ -22,13 +22,14 @@ export default function AdminLoginPage() {
     setIsLoading(true);
 
     // Mock login - in production use Firebase Auth
-    if (email === "admin@dlegacies.com" && password === "admin123") {
+    if (email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       toast({
         title: "Login Successful",
         description: "Welcome to the D'LEGACIES Admin Panel",
       });
       router.push("/admin/dashboard");
     } else {
+
       toast({
         variant: "destructive",
         title: "Login Failed",
