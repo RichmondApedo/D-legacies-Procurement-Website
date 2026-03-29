@@ -1,12 +1,12 @@
 import type {Metadata} from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/navigation/navbar';
 import { Footer } from '@/components/navigation/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = { className: 'font-sans' };
+const fontSans = { className: 'font-sans' };
 
 export const metadata: Metadata = {
   title: "D'LEGACIES | Procurement Consulting Accra",
@@ -20,14 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased flex flex-col min-h-screen`}>
+      <body className={`${fontSans.className} antialiased flex flex-col min-h-screen`}>
         <FirebaseClientProvider>
           <Navbar />
           <main className="flex-grow">
             {children}
           </main>
           <Footer />
-          <Toaster />
+          < Toaster />
         </FirebaseClientProvider>
       </body>
     </html>

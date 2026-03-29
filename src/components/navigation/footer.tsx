@@ -82,7 +82,6 @@ export function Footer() {
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white/30 space-y-6 md:space-y-0">
           <p>© {currentYear} D&apos;LEGACIES E-PROCUREMENT CONSULT. AFRICA&apos;S SOURCING PARTNER.</p>
           <div className="flex space-x-10">
-            <Link href="/admin" className="hover:text-secondary transition-colors">Admin Portal</Link>
             <Link href="#" className="hover:text-secondary transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-secondary transition-colors">Terms of Service</Link>
           </div>
