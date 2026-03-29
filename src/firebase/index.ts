@@ -22,6 +22,19 @@ export function initializeFirebase() {
       if (process.env.NODE_ENV === "production") {
         console.warn('Automatic initialization failed. Falling back to firebase config object.', e);
       }
+      
+      // If we don't have an API key, don't attempt to initialize.
+      // This is common during build time on 3rd party CI/CD like Vercel
+      // if the environment variables aren't provided to the build process.
+      if (!firebaseConfig.apiKey) {
+        console.warn('Firebase API key missing. Skipping initialization (likely during build-time).');
+        return {
+          firebaseApp: null as any,
+          auth: null as any,
+          firestore: null as any
+        };
+      }
+      
       firebaseApp = initializeApp(firebaseConfig);
     }
 
