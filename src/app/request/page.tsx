@@ -73,31 +73,31 @@ export default function RequestServicePage() {
       <div className="container mx-auto px-4 max-w-5xl animate-in fade-in slide-in-from-bottom-12 duration-1000">
         
         {/* Header Branding */}
-        <div className="flex flex-col items-center text-center mb-20 space-y-8">
-          <div className="inline-flex items-center space-x-4 px-6 py-3 bg-secondary/10 border border-secondary/30 rounded-3xl text-secondary text-sm font-black uppercase tracking-[0.3em]">
-            <ShoppingCart className="h-6 w-6" />
+        <div className="flex flex-col items-center text-center mb-16 md:mb-20 space-y-6 md:space-y-8">
+          <div className="inline-flex items-center space-x-3 md:space-x-4 px-4 md:px-6 py-2 md:py-3 bg-secondary/10 border border-secondary/30 rounded-3xl text-secondary text-xs md:text-sm font-black uppercase tracking-[0.3em]">
+            <ShoppingCart className="h-5 w-5 md:h-6 md:w-6" />
             <span>Institutional Procurement Portal</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-primary tracking-tighter leading-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-primary tracking-tighter leading-tight text-balance">
             Initiate Sourcing <br />
             <span className="text-secondary">Requirement.</span>
           </h1>
-          <p className="text-muted-foreground text-xl max-w-3xl leading-relaxed font-medium">
+          <p className="text-muted-foreground text-lg md:text-xl max-w-3xl leading-relaxed font-medium">
             Deploy our global sourcing network. Submissions are routed directly to our executive team at <span className="text-primary font-bold">dlegacies75@yahoo.com</span>.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-16">
           <div className="lg:col-span-2">
-            <Card className="border-none shadow-[0_40px_80px_-15px_rgba(0,0,0,0.1)] rounded-[3rem] overflow-hidden bg-white">
+            <Card className="border-none shadow-[0_40px_80px_-15px_rgba(0,0,0,0.1)] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-white">
               <div className="h-3 bg-secondary w-full"></div>
-              <CardHeader className="p-12 pb-6">
-                <CardTitle className="text-3xl font-black tracking-tight">Requirement Manifest</CardTitle>
-                <CardDescription className="text-lg font-medium">Technical specifications for our consultants.</CardDescription>
+              <CardHeader className="p-6 md:p-12 pb-4 md:pb-6">
+                <CardTitle className="text-2xl md:text-3xl font-black tracking-tight">Requirement Manifest</CardTitle>
+                <CardDescription className="text-base md:text-lg font-medium">Technical specifications for our consultants.</CardDescription>
               </CardHeader>
               
               <form onSubmit={handleSubmit}>
-                <CardContent className="p-12 space-y-12">
+                <CardContent className="p-6 md:p-12 space-y-8 md:space-y-12">
                   <div className="space-y-8">
                     <h3 className="text-sm font-black text-secondary uppercase tracking-[0.2em] border-b pb-4">Business Identification</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">

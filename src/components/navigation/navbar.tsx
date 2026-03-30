@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Globe, Target } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
@@ -82,27 +82,56 @@ export function Navbar() {
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b p-8 space-y-6 shadow-2xl animate-in slide-in-from-top-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className={cn(
-                "block text-2xl font-black transition-colors",
-                pathname === link.href ? "text-secondary" : "text-primary"
-              )}
-            >
-              {link.name}
+        <div className="md:hidden fixed inset-0 z-[60] bg-white animate-in slide-in-from-right duration-300 flex flex-col pt-12">
+          <div className="container mx-auto px-4 flex justify-between items-center mb-16">
+            <Link href="/" className="flex flex-col" onClick={() => setIsOpen(false)}>
+              <span className="text-2xl font-black tracking-tighter leading-none text-primary">
+                D&apos;LEGACIES
+              </span>
+              <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-secondary">
+                E-PROCUREMENT
+              </span>
             </Link>
-          ))}
-          <div className="pt-4 space-y-4">
-            <Button asChild className="w-full bg-primary text-white font-bold h-14 rounded-xl text-lg">
+            <button 
+              className="p-2 rounded-xl text-primary bg-muted" 
+              onClick={() => setIsOpen(false)}
+            >
+              <X className="h-7 w-7" />
+            </button>
+          </div>
+
+          <div className="container mx-auto px-6 flex flex-col space-y-8">
+            {navLinks.map((link, i) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  "text-4xl font-black tracking-tight transition-all",
+                  pathname === link.href ? "text-secondary translate-x-3" : "text-primary hover:text-secondary"
+                )}
+                style={{ transitionDelay: `${i * 50}ms` }}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-auto bg-muted/30 p-10 space-y-8 border-t">
+            <Button asChild size="lg" className="w-full bg-primary text-white font-black h-16 rounded-2xl text-xl shadow-2xl shadow-primary/20">
               <Link href="/request" onClick={() => setIsOpen(false)}>Secure a Quote</Link>
             </Button>
-            <div className="flex items-center justify-center space-x-2 text-primary/60 font-bold">
-              <Phone className="h-4 w-4" />
-              <span>055 775 9388</span>
+            
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center space-x-4 text-primary font-bold">
+                <div className="p-2 bg-white rounded-lg shadow-sm"><Phone className="h-4 w-4" /></div>
+                <span>055 775 9388</span>
+              </div>
+              <div className="flex items-row space-x-3 pt-2">
+                {/* Social placeholders for mobile */}
+                <div className="w-10 h-10 bg-white rounded-xl shadow-sm border flex items-center justify-center text-primary/40"><Target className="h-4 w-4" /></div>
+                <div className="w-10 h-10 bg-white rounded-xl shadow-sm border flex items-center justify-center text-primary/40"><Globe className="h-4 w-4" /></div>
+              </div>
             </div>
           </div>
         </div>

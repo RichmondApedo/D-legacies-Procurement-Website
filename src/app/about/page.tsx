@@ -1,7 +1,12 @@
-
+import { Metadata } from "next";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { ShieldCheck, Target, Eye, MapPin, Award, Users } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn about D'LEGACIES E-PROCUREMENT CONSULT, Ghana's premier procurement partner. Our mission is to provide world-class sourcing solutions with integrity and excellence.",
+};
 
 export default function AboutPage() {
   const teamImg = PlaceHolderImages.find(img => img.id === "consulting-team");
@@ -9,9 +14,9 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col">
       {/* Page Header */}
-      <section className="bg-primary py-20">
+      <section className="bg-primary py-32 md:py-48">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">About D&apos;LEGACIES</h1>
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter">About D&apos;LEGACIES</h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto">
             A premier procurement consultancy dedicated to excellence, transparency, and strategic growth for businesses in Ghana and beyond.
           </p>

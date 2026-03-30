@@ -1,13 +1,18 @@
-
+import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ShieldCheck, Globe, Truck, Building2, PackageCheck, Award, Target } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
+export const metadata: Metadata = {
+  title: "Elite Procurement Consulting | D'LEGACIES Accra",
+  description: "Ghana's premier partner for institutional-grade sourcing, global logistics, and strategic procurement intelligence. Elevate your supply chain with D'LEGACIES.",
+};
+
 export default function Home() {
-  const heroImg = PlaceHolderImages.find(img => img.id === "hero-consulting");
-  const sourcingImg = PlaceHolderImages.find(img => img.id === "sourcing-logistics");
+  const heroImg = PlaceHolderImages.find(img => img.id === "shipping_global");
+  const sourcingImg = PlaceHolderImages.find(img => img.id === "receiving_warehouse");
 
   return (
     <div className="flex flex-col">
@@ -36,7 +41,7 @@ export default function Home() {
               <span>Elite Sourcing Intelligence</span>
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.95]">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.95] text-balance">
               Procurement <br />
               <span className="text-secondary">Excellence</span> <br />
               In Africa.
@@ -75,7 +80,7 @@ export default function Home() {
               { label: "Partners", value: "250+", sub: "Vetted Suppliers", icon: <Building2 className="text-secondary" /> },
               { label: "Standard", value: "Elite", sub: "ISO Compliant", icon: <ShieldCheck className="text-secondary" /> }
             ].map((stat, i) => (
-              <div key={i} className="p-12 text-center border-r last:border-r-0 hover:bg-muted/30 transition-colors">
+              <div key={i} className="p-8 md:p-12 text-center border-b md:border-b-0 md:border-r last:border-0 hover:bg-muted/30 transition-colors">
                 <div className="flex justify-center mb-6">
                   <div className="p-4 bg-secondary/10 rounded-2xl">
                     {stat.icon}

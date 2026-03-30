@@ -1,4 +1,4 @@
-
+import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,13 @@ import {
   Search
 } from "lucide-react";
 
+export const metadata: Metadata = {
+  title: "Our Services",
+  description: "Explore D'LEGACIES E-PROCUREMENT CONSULT's range of services, including strategic sourcing, global logistics, brand procurement, and institutional-grade consulting in Accra, Ghana.",
+};
+
 export default function ServicesPage() {
-  const warehouseImg = PlaceHolderImages.find(img => img.id === "warehouse-logistics");
+  const warehouseImg = PlaceHolderImages.find(img => img.id === "sourcing-logistics");
 
   const detailedServices = [
     {
