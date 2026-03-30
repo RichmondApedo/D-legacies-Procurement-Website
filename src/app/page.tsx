@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const heroImg = PlaceHolderImages.find(img => img.id === "shipping_global");
-  const sourcingImg = PlaceHolderImages.find(img => img.id === "receiving_warehouse");
+  const heroImg = PlaceHolderImages.find(img => img.id === "hero-consulting");
+  const sourcingImg = PlaceHolderImages.find(img => img.id === "sourcing-logistics");
 
   return (
     <div className="flex flex-col">
@@ -142,6 +142,7 @@ export default function Home() {
                     alt="Supply Chain Strategy"
                     fill
                     className="object-cover"
+                    priority
                     placeholder="blur"
                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxIj48cmVjdCBmaWxsPSIjMDcwZTFiIiAvPjwvc3ZnPg=="
                     sizes="(max-width: 1024px) 100vw, 50vw"

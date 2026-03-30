@@ -35,6 +35,7 @@ export default function AboutPage() {
                     alt={teamImg.description || "Our Team"}
                     fill
                     className="object-cover"
+                    priority
                     data-ai-hint={teamImg.imageHint}
                     placeholder="blur"
                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxIj48cmVjdCBmaWxsPSIjMDcwZTFiIiAvPjwvc3ZnPg=="
