@@ -26,8 +26,10 @@ export default function Home() {
               fill
               className="object-cover opacity-40 mix-blend-overlay"
               priority
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxIj48cmVjdCBmaWxsPSIjMDcwZTFiIiAvPjwvc3ZnPg=="
               sizes="100vw"
-              quality={90}
+              quality={80}
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-tr from-primary via-primary/80 to-transparent"></div>
@@ -140,8 +142,10 @@ export default function Home() {
                     alt="Supply Chain Strategy"
                     fill
                     className="object-cover"
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxIj48cmVjdCBmaWxsPSIjMDcwZTFiIiAvPjwvc3ZnPg=="
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    quality={85}
+                    quality={75}
                   />
                 )}
               </div>

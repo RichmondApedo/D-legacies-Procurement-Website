@@ -36,8 +36,10 @@ export default function AboutPage() {
                     fill
                     className="object-cover"
                     data-ai-hint={teamImg.imageHint}
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxIj48cmVjdCBmaWxsPSIjMDcwZTFiIiAvPjwvc3ZnPg=="
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    quality={85}
+                    quality={75}
                   />
                 )}
                 <div className="absolute inset-0 bg-primary/20"></div>
