@@ -26,6 +26,8 @@ export default function Home() {
               fill
               className="object-cover opacity-40 mix-blend-overlay"
               priority
+              sizes="100vw"
+              quality={90}
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-tr from-primary via-primary/80 to-transparent"></div>
@@ -138,6 +140,8 @@ export default function Home() {
                     alt="Supply Chain Strategy"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    quality={85}
                   />
                 )}
               </div>

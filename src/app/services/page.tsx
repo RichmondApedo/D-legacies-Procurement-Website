@@ -135,6 +135,8 @@ export default function ServicesPage() {
                 fill
                 className="object-cover"
                 data-ai-hint={warehouseImg.imageHint}
+                sizes="100vw"
+                quality={85}
               />
             )}
             <div className="absolute inset-0 bg-primary/80"></div>
