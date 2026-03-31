@@ -3,31 +3,31 @@
     {
       "id": "hero-consulting",
       "description": "Premium global shipping and maritime logistics excellence",
-      "imageUrl": "/images/shipping_global.png",
+      "imageUrl": "/images/shipping_global.webp",
       "imageHint": "global shipping"
     },
     {
       "id": "sourcing-logistics",
       "description": "Modern warehouse receiving and inventory management",
-      "imageUrl": "/images/receiving_warehouse.png",
+      "imageUrl": "/images/receiving_warehouse.webp",
       "imageHint": "warehouse receiving"
     },
     {
       "id": "warehouse-premium",
       "description": "Strategic procurement and sourcing operations in China",
-      "imageUrl": "/images/china_sourcing.png",
+      "imageUrl": "/images/china_sourcing.webp",
       "imageHint": "china sourcing"
     },
     {
       "id": "consulting-team",
       "description": "High-capacity maritime cargo loading and industrial port operations",
-      "imageUrl": "/images/ship_loading.png",
+      "imageUrl": "/images/ship_loading.webp",
       "imageHint": "ship loading"
     },
     {
       "id": "accra-office",
       "description": "Executive air freight and cargo aircraft loading operations",
-      "imageUrl": "/images/air_cargo_loading.png",
+      "imageUrl": "/images/air_cargo_loading.webp",
       "imageHint": "air cargo"
     }
   ]

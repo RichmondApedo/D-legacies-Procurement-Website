@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Our Services",
-  description: "Explore D'LEGACIES E-PROCUREMENT CONSULT's range of services, including strategic sourcing, global logistics, brand procurement, and institutional-grade consulting in Accra, Ghana.",
+  title: "Global Sourcing & Logistics Services",
+  description: "Explore our institutional-grade procurement services: Strategic sourcing from China, global maritime logistics, and organizational supply chain consulting in Accra, Ghana.",
 };
 
 export default function ServicesPage() {

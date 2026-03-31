@@ -6,8 +6,8 @@ import { ArrowRight, ShieldCheck, Globe, Truck, Building2, PackageCheck, Award, 
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export const metadata: Metadata = {
-  title: "Elite Procurement Consulting | D'LEGACIES Accra",
-  description: "Ghana's premier partner for institutional-grade sourcing, global logistics, and strategic procurement intelligence. Elevate your supply chain with D'LEGACIES.",
+  title: "D'LEGACIES | Elite Procurement, Global Sourcing & Logistics Accra",
+  description: "Ghana's premier agency for institutional-grade sourcing, global maritime logistics, and strategic procurement. We bridge the gap between global demand and West African markets.",
 };
 
 export default function Home() {

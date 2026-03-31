@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
-  description: "Get in touch with D'LEGACIES E-PROCUREMENT CONSULT. Reach out to our Accra headquarters for elite sourcing and procurement inquiries via email, phone, or WhatsApp.",
+  title: "Contact Our Executive Team",
+  description: "Reach out to D'LEGACIES E-PROCUREMENT CONSULT. Direct lines to our Accra headquarters for sourcing inquiries, logistics support, and strategic partnerships.",
 };
 
 export default function ContactLayout({

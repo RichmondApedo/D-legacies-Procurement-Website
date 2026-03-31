@@ -4,8 +4,8 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { ShieldCheck, Target, Eye, MapPin, Award, Users } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Us",
-  description: "Learn about D'LEGACIES E-PROCUREMENT CONSULT, Ghana's premier procurement partner. Our mission is to provide world-class sourcing solutions with integrity and excellence.",
+  title: "Strategic Procurement Experts",
+  description: "Discover the journey of D'LEGACIES E-PROCUREMENT CONSULT. Ghana's leading team for global sourcing, institutional-grade logistics, and supply chain excellence in Accra.",
 };
 
 export default function AboutPage() {

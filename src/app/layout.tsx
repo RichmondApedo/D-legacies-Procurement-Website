@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "D'LEGACIES E-PROCUREMENT CONSULT",
     images: [
       {
-        url: "/images/shipping_global.png",
+        url: "/images/shipping_global.webp",
         width: 1200,
         height: 630,
         alt: "D'LEGACIES Global Logistics",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "D'LEGACIES | Procurement Excellence Africa",
     description: "Sourcing, Logistics, and Procurement Intelligence in Accra, Ghana.",
-    images: ["/images/shipping_global.png"],
+    images: ["/images/shipping_global.webp"],
   },
   robots: {
     index: true,
@@ -62,7 +62,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          < Toaster />
+          <Toaster />
         </FirebaseClientProvider>
       </body>
     </html>
